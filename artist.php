@@ -8,7 +8,7 @@
         public $artistName;
         public $XartistName;                                //Name of the artist from whom he got linked
         public $XartistId;                                  //ID of the artist from whom he got linked
-
+        public $RelArtists_IDs = array();
         public function __construct($artistId){
             $this->artistId = $artistId;
             $this->artistName = $this->getName($artistId);
@@ -57,21 +57,19 @@
 
             $RelArtists_Details = json_decode($result,true);
 
-            $RelArtists_name = array();
-
            
             for($i =0; $i < count($RelArtists_Details["artists"]) ; $i++){
-                $RelArtists_name[] = $RelArtists_Details["artists"][$i]["name"];
-            }
-
-            $RelArtists_id = array();
-
-           
-            for($i =0; $i < count($RelArtists_Details["artists"]) ; $i++){
-                $RelArtists_id[] = $RelArtists_Details["artists"][$i]["id"];
+                $this->RelArtists_IDs[] = $RelArtists_Details["artists"][$i]["id"];
             }
             
-            return $RelArtists_id;
+            $RelArtists_dtls = array();
+
+           
+            for($i =0; $i < count($RelArtists_Details["artists"]) ; $i++){
+                $RelArtists_dtls[] = new Artist($RelArtists_Details["artists"][$i]["id"]);
+            }
+            
+            return $RelArtists_dtls;
             
           }   
 
